@@ -13,13 +13,13 @@ To be able to do free admin mints you need to add the address of your minter acc
 ## Code setup
 
 ```
-$ yarn
+$ pnpm i
 ```
 
 1. Copy `.env.example` to `.env.local` (or put the variables in your environment) and update the values.
 2. Update the `src/config.ts` file with your chain, contract address and collection token ID
 
-For added security you might want to enable KV on vercel! This will save any sucessful mint requests and prevent people to spam free mints.
+For added security you might want to enable KV on vercel! This will save any successful mint requests and prevent people to spam free mints.
 
 ## Customize
 
@@ -31,16 +31,6 @@ For added security you might want to enable KV on vercel! This will save any suc
 - The free mint will run until the minter account is out of funds, then everyone will just get an error :P
 - If you don't add KV people might be able to spam your frame to get multiple free mints! Didn't test tho
 
-## Contact
+## Credits
 
-Any questions? Ping me on [Farcaster @owl](https://warpcast.com/owl)!
-
-If you feel like donating some funds for more fun stuff 😘 `0xFd37f4625CA5816157D55a5b3F7Dd8DD5F8a0C2F`
-
-```
-@owl out 🫡
-  .___.
-  (o,o)
-  (\+/)
-   ^ ^
-```
+c/t [Farcaster @owl](https://warpcast.com/owl) for his open-source template.

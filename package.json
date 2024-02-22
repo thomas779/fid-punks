@@ -1,9 +1,9 @@
 {
-  "name": "zora-mint-frame",
-  "version": "0.0.0",
+  "name": "fid-punks-zora-mint-frame",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -18,7 +18,8 @@
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "viem": "2.7.12"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
@@ -27,7 +28,7 @@
     "sharp": "0.33.1"
   },
   "prettier": {
-	"singleQuote": true,
-	"semi": true
+    "singleQuote": true,
+    "semi": true
   }
 }

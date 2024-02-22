@@ -1,4 +1,5 @@
 import { Zora1155ABI } from '@/abi/Zora1155';
+import { Zora721ABI } from '@/abi/Zora721';
 import { CHAIN, CONTRACT_ADDRESS, SITE_URL, TOKEN_ID } from '@/config';
 import { kv } from '@vercel/kv';
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,16 +17,14 @@ const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
 const MINTER_PRIVATE_KEY = process.env.MINTER_PRIVATE_KEY as Hex | undefined;
 const HAS_KV = !!process.env.KV_URL;
 
-const transport = http(process.env.RPC_URL);
-
 const publicClient = createPublicClient({
   chain: CHAIN,
-  transport,
+  transport: http(),
 });
 
 const walletClient = createWalletClient({
   chain: CHAIN,
-  transport,
+  transport: http(),
 });
 
 export const dynamic = 'force-dynamic';
@@ -42,15 +41,6 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (!status?.valid) {
       console.error(status);
       throw new Error('Invalid frame request');
-    }
-
-    // Check if user has liked and recasted
-    const hasLikedAndRecasted =
-      !!status?.action?.cast?.viewer_context?.liked &&
-      !!status?.action?.cast?.viewer_context?.recasted;
-
-    if (!hasLikedAndRecasted) {
-      return getResponse(ResponseType.RECAST);
     }
 
     // Check if user has an address connected
@@ -72,10 +62,10 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     // Check if user has a balance
     const balance = await publicClient.readContract({
-      abi: Zora1155ABI,
+      abi: Zora721ABI,
       address: CONTRACT_ADDRESS,
       functionName: 'balanceOf',
-      args: [address, TOKEN_ID],
+      args: [address],
     });
 
     if (balance > 0n) {
@@ -140,6 +130,7 @@ function getResponse(type: ResponseType) {
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:image" content="${SITE_URL}/${IMAGE}" />
+    <meta property="fc:frame:image:aspect_ratio" content="1:1" />
     <meta property="fc:frame:post_url" content="${SITE_URL}/api/frame" />
     ${
       shouldRetry
@@ -168,5 +159,7 @@ async function validateFrameRequest(data: string | undefined) {
     options,
   )
     .then((response) => response.json())
-    .catch((err) => console.error(err));
+    .catch((err) =>
+      console.error('Failed to validate frame request with Neynar API:', err),
+    );
 }
